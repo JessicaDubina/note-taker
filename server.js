@@ -22,6 +22,7 @@ app.get('/notes', (req, res) => {
 
 //handler for get notes data request
 
+
 //handler for post notes data request
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request was recieved for a new note`)
@@ -34,18 +35,33 @@ app.post('/api/notes', (req, res) => {
         }
 
         //add newnote to db
-    
-        const response = {
-            status: 'success',
-            body: newNote,
-          };
-  
-          console.log(response);
-          res.status(201).json(response);        
+        fs.readFile('./db/db.json', 'utf8', (err, data) => {
+            if (err) {
+                console.error(error);
+            } else {
+                const parsedNotes = JSON.parse(data);
+                parsedNotes.push(newNote);
+                allNotes = JSON.stringify(parsedNotes, null, '\t');
+                fs.writeFile('./db/db.json', allNotes, (err) => {
+                    if (err) {
+                        console.error(err)
+                    } else {
+                        const response = {
+                            status: 'success',
+                            body: newNote,
+                          };
+                        console.info("Successfully added note!")
+                        res.status(201).json(response);  
+                    }
+                })
+            }
+        })        
     } else {
-      res.status(500).json('Error in posting review');
+      res.status(500).json('Error in adding note');
     }
 });  
+
+//handler for delete note request
 
 //listener
 app.listen(PORT, () =>
