@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 3001;
+const fs = require('fs');
 
 const app = express();
 
@@ -14,12 +15,37 @@ app.get('/', (req, res) => {
   });
 
 
-//handler for get notes request
+//handler for get notes page request
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
+//handler for get notes data request
 
+//handler for post notes data request
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request was recieved for a new note`)
+    const { title, text } = req.body;
+
+    if (title && text) {
+        const newNote = {
+            title,
+            text,
+        }
+
+        //add newnote to db
+    
+        const response = {
+            status: 'success',
+            body: newNote,
+          };
+  
+          console.log(response);
+          res.status(201).json(response);        
+    } else {
+      res.status(500).json('Error in posting review');
+    }
+});  
 
 //listener
 app.listen(PORT, () =>
