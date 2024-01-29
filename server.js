@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 3001;
+const notes = require('./db/db.json');
 const fs = require('fs');
 
 const app = express();
@@ -21,7 +22,9 @@ app.get('/notes', (req, res) => {
 });
 
 //handler for get notes data request
-
+app.get('/api/notes', (req,res) => {
+    res.status(200).json(notes);
+});
 
 //handler for post notes data request
 app.post('/api/notes', (req, res) => {
