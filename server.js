@@ -42,7 +42,7 @@ app.post('/api/notes', (req, res) => {
         //add newnote to db
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
-                console.error(error);
+                console.error(err);
             } else {
                 const parsedNotes = JSON.parse(data);
                 parsedNotes.push(newNote);
@@ -67,8 +67,32 @@ app.post('/api/notes', (req, res) => {
 });  
 
 //handler for delete note request
-app.delete('/api/notes', (req, res) => {
-
+app.delete('/api/notes/:id', (req, res) => {
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            parsedNotes = JSON.parse(data);
+            //find data by id and filter out entry with that id from database
+            deletedNote = parsedNotes.filter(x=>x.id!=req.params.id)
+            console.log(deletedNote);
+            newNotes = JSON.stringify(deletedNote, null, '\t');
+            fs.writeFile('./db/db.json', newNotes, (err) => {
+                if (err) {
+                    console.error(err)
+                } else {
+                    const response = {
+                        status: 'success',
+                        body: newNotes,
+                      };
+                    console.info("Successfully deleted note!")
+                    res.status(201).json(response); 
+                }
+            })
+        }
+    
+    
+    });
 });
 
 //listener
