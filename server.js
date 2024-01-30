@@ -3,6 +3,7 @@ const path = require('path');
 const PORT = process.env.PORT || 3001;
 const notes = require('./db/db.json');
 const fs = require('fs');
+const generateId = require('./helper/id.js');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
+            id: generateId,
         }
 
         //add newnote to db
@@ -65,6 +67,9 @@ app.post('/api/notes', (req, res) => {
 });  
 
 //handler for delete note request
+app.delete('/api/notes', (req, res) => {
+
+});
 
 //listener
 app.listen(PORT, () =>
