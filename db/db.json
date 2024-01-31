@@ -1,12 +1,17 @@
 [
 	{
-		"title": "1",
-		"text": "1",
-		"id": "7e76acef-c9ad-4d94-ac9c-413c9355278c"
+		"title": "Dishes",
+		"text": "Unload and load dishwasher",
+		"id": "fe109d17-51ba-4337-8b45-72ee643db4b7"
 	},
 	{
-		"title": "2",
-		"text": "2",
-		"id": "34eb9ff5-662c-4c04-bb8c-4c6c79361610"
+		"title": "Groceries",
+		"text": "Pick up stuff for bbq:\nbuns\nlettuce\npickles\nchips",
+		"id": "e96e1f01-b841-421f-a67b-83da1364b636"
+	},
+	{
+		"title": "Soccer",
+		"text": "Practice M, W @ 5:30",
+		"id": "0a16ab38-a6c1-4cf3-bde2-5aa41394245a"
 	}
 ]
