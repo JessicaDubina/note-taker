@@ -1,9 +1,8 @@
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 3001;
-const notes = require('./db/db.json');
 const fs = require('fs');
-const generateId = require('./helper/id.js');
+const { v4: uuid } = require('uuid');
 
 const app = express();
 
@@ -17,26 +16,28 @@ app.get('/', (req, res) => {
   });
 
 
-//handler for get notes page request
+//handler for get notes html page request
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
 //handler for get notes data request
 app.get('/api/notes', (req,res) => {
-    res.status(200).json(notes);
+const notes = require('./db/db.json');
+    const data = fs.readFileSync('./db/db.json');
+    const parsed = JSON.parse(data);
+    res.status(200).json(parsed);
 });
 
 //handler for post notes data request
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request was recieved for a new note`)
     const { title, text } = req.body;
-
     if (title && text) {
         const newNote = {
             title,
             text,
-            id: generateId,
+            id: uuid(),
         }
 
         //add newnote to db
@@ -51,12 +52,8 @@ app.post('/api/notes', (req, res) => {
                     if (err) {
                         console.error(err)
                     } else {
-                        const response = {
-                            status: 'success',
-                            body: newNote,
-                          };
                         console.info("Successfully added note!")
-                        res.status(201).json(response);  
+                        res.status(201).send(parsedNotes);  
                     }
                 })
             }
@@ -86,7 +83,7 @@ app.delete('/api/notes/:id', (req, res) => {
                         body: newNotes,
                       };
                     console.info("Successfully deleted note!")
-                    res.status(201).json(response); 
+                    res.status(201).json(parsedNotes); 
                 }
             })
         }
